@@ -1,12 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://dramux1asfstc"]
+[gd_scene load_steps=3 format=3 uid="uid://dramux1asfstc"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_l37a8"]
 [ext_resource type="PackedScene" uid="uid://cimhebjccj8f7" path="res://prefabs/Board.tscn" id="2_tikg1"]
-[ext_resource type="PackedScene" uid="uid://b54yhaxshm837" path="res://prefabs/Block.tscn" id="3_wisid"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_l37a8")
-block_scene = ExtResource("3_wisid")
 
 [node name="Board" parent="." instance=ExtResource("2_tikg1")]
 
