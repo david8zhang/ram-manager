@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://8l0tq27lc43b"]
+[gd_scene load_steps=3 format=3 uid="uid://8l0tq27lc43b"]
 
-[ext_resource type="Texture2D" uid="uid://3dpp3fyhwio1" path="res://assets/placeholder/single/Blue.png" id="2_a6wsc"]
+[ext_resource type="Texture2D" uid="uid://b0ou47rm6ntoi" path="res://assets/placeholder/single/LightBlue.png" id="1_cpjrg"]
+[ext_resource type="Script" path="res://scripts/Block.gd" id="1_utlxb"]
 
 [node name="Block" type="Sprite2D"]
-texture = ExtResource("2_a6wsc")
+texture = ExtResource("1_cpjrg")
+script = ExtResource("1_utlxb")

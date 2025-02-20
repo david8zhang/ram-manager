@@ -20,9 +20,11 @@ var block_size = 64
 var width = 10
 var height = 20
 var grid = []
-var mblock_type_to_place = MultiBlockType.LINE
+var mblock_type_to_place = MultiBlockType.T
 
-var curr_block_pieces = []
+var curr_mblock_color = Block.BLOCK_COLORS.pick_random()
+var curr_mblock_pieces = []
+var curr_mblocks_on_board = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -51,12 +53,21 @@ func convert_board_pos_to_world_pos(board_pos: Vector2):
 	var world_y = board_pos.x * block_size + top_left.y + (block_size / 2)
 	return Vector2(world_x, world_y)
 
-func _process(delta):
+func _process(_delta):
 	var camera = game.camera as Camera2D
 	var mouse_pos = camera.get_global_mouse_position()
 	var board_pos = convert_world_pos_to_board_pos(mouse_pos)
 	preview_place_block(mblock_type_to_place, board_pos)
 
+func _input(event):
+	if event is InputEventMouseButton and event.pressed:
+		place_block()
+
+func place_block():
+	curr_mblocks_on_board.append(curr_mblock_pieces)
+	curr_mblock_pieces = []
+	mblock_type_to_place = MultiBlockType.values().pick_random()
+	curr_mblock_color = Block.BLOCK_COLORS.pick_random()
 
 func preview_place_block(mblock_type: MultiBlockType, board_pos: Vector2):
 	clear_curr_block_pieces()
@@ -65,28 +76,116 @@ func preview_place_block(mblock_type: MultiBlockType, board_pos: Vector2):
 			MultiBlockType.LINE:
 				preview_line_block(board_pos)
 			MultiBlockType.L:
-				pass
+				preview_L_block(board_pos)
 			MultiBlockType.J:
-				pass
+				preview_J_block(board_pos)
 			MultiBlockType.SQUARE:
-				pass
+				preview_square_block(board_pos)
 			MultiBlockType.S:
-				pass
+				preview_S_block(board_pos)
 			MultiBlockType.Z:
-				pass
+				preview_Z_block(board_pos)
 			MultiBlockType.T:
-				pass
+				preview_T_block(board_pos)
 
 func clear_curr_block_pieces():
-	for piece in curr_block_pieces:
+	for piece in curr_mblock_pieces:
 		piece.queue_free()
-	curr_block_pieces = []
+	curr_mblock_pieces = []
+
+func spawn_block(block_pos: Vector2) -> Sprite2D:
+	var world_pos = convert_board_pos_to_world_pos(block_pos)
+	var new_block = block_scene.instantiate() as Block
+	new_block.curr_color = curr_mblock_color
+	add_child(new_block)
+	new_block.global_position = world_pos
+	return new_block
+
+func spawn_multi_block(board_pos: Vector2, block_positions):
+	for pos in block_positions:
+		var block_pos = Vector2(board_pos.x + pos[0], board_pos.y + pos[1])
+		var new_block = spawn_block(block_pos)
+		curr_mblock_pieces.append(new_block)
 
 func preview_line_block(board_pos: Vector2):
-	for i in range(0, 4):
-		var block_pos = Vector2(board_pos.x + i, board_pos.y)
-		var world_pos = convert_board_pos_to_world_pos(block_pos)
-		var new_block = block_scene.instantiate() as Sprite2D
-		add_child(new_block)
-		new_block.global_position = world_pos
-		curr_block_pieces.append(new_block)
+	var clamped_row = clamp(board_pos.x, 2, height - 2)
+	var clamped_board_pos = Vector2(clamped_row, board_pos.y)
+	var block_positions = [
+		[-2, 0],
+		[-1, 0],
+		[0, 0],
+		[1, 0]
+	]
+	spawn_multi_block(clamped_board_pos, block_positions)
+
+func preview_L_block(board_pos: Vector2):
+	var clamped_row = clamp(board_pos.x, 1, height - 1)
+	var clamped_col = clamp(board_pos.y, 1, width - 2)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[0, -1],
+		[0, 1],
+		[-1, -1]
+	]
+	spawn_multi_block(clamped_board_pos, block_positions)
+
+func preview_J_block(board_pos: Vector2):
+	var clamped_row = clamp(board_pos.x, 1, height - 1)
+	var clamped_col = clamp(board_pos.y, 1, width - 2)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[0, -1],
+		[0, 1],
+		[-1, -1]
+	]
+	spawn_multi_block(clamped_board_pos, block_positions)
+
+func preview_square_block(board_pos: Vector2):
+	var clamped_row = clamp(board_pos.x, 0, height - 2)
+	var clamped_col = clamp(board_pos.y, 0, width - 2)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[1, 0],
+		[0, 1],
+		[1, 1]
+	]
+	spawn_multi_block(clamped_board_pos, block_positions)
+
+func preview_S_block(board_pos: Vector2):
+	var clamped_row = clamp(board_pos.x, 0, height - 2)
+	var clamped_col = clamp(board_pos.y, 1, width - 2)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[1, 0],
+		[1, -1],
+		[0, 1]
+	]
+	spawn_multi_block(clamped_board_pos, block_positions)
+
+func preview_Z_block(board_pos: Vector2):
+	var clamped_row = clamp(board_pos.x, 0, height - 2)
+	var clamped_col = clamp(board_pos.y, 1, width - 2)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[0, -1],
+		[1, 0],
+		[1, 1]
+	]
+	spawn_multi_block(clamped_board_pos, block_positions)
+
+func preview_T_block(board_pos: Vector2):
+	var clamped_row = clamp(board_pos.x, 1, height - 1)
+	var clamped_col = clamp(board_pos.y, 1, width - 2)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[-1, 0],
+		[0, 1],
+		[0, -1]
+	]
+	spawn_multi_block(clamped_board_pos, block_positions)
