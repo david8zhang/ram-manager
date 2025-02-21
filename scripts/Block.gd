@@ -11,6 +11,7 @@ static var BLOCK_COLORS = [
 	'Yellow'
 ]
 var curr_color = Block.BLOCK_COLORS[0]
+var board_pos = Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

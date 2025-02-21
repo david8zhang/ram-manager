@@ -64,10 +64,11 @@ func _input(event):
 		place_block()
 
 func place_block():
-	curr_mblocks_on_board.append(curr_mblock_pieces)
-	curr_mblock_pieces = []
-	mblock_type_to_place = MultiBlockType.values().pick_random()
-	curr_mblock_color = Block.BLOCK_COLORS.pick_random()
+	if !is_overlapping_with_other_mblock(curr_mblock_pieces):
+		curr_mblocks_on_board.append(curr_mblock_pieces)
+		curr_mblock_pieces = []
+		mblock_type_to_place = MultiBlockType.values().pick_random()
+		curr_mblock_color = Block.BLOCK_COLORS.pick_random()
 
 func preview_place_block(mblock_type: MultiBlockType, board_pos: Vector2):
 	clear_curr_block_pieces()
@@ -93,9 +94,23 @@ func clear_curr_block_pieces():
 		piece.queue_free()
 	curr_mblock_pieces = []
 
+func is_overlapping_with_other_mblock(curr_mblock_pieces):
+	for mblock in curr_mblocks_on_board:
+		for block in curr_mblock_pieces:
+			if does_block_overlap(mblock, block):
+				return true
+	return false
+
+func does_block_overlap(mblock, block):
+	for b in mblock:
+		if b.board_pos == block.board_pos:
+			return true
+	return false
+
 func spawn_block(block_pos: Vector2) -> Sprite2D:
 	var world_pos = convert_board_pos_to_world_pos(block_pos)
 	var new_block = block_scene.instantiate() as Block
+	new_block.board_pos = block_pos
 	new_block.curr_color = curr_mblock_color
 	add_child(new_block)
 	new_block.global_position = world_pos
