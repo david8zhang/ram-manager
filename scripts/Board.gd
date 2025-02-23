@@ -14,6 +14,7 @@ enum MultiBlockType {
 @onready var sprite = $Sprite2D
 @onready var game = get_node("/root/Main") as Game
 @export var block_scene: PackedScene
+@export var mblock_scene: PackedScene
 
 var top_left: Vector2
 var block_size = 64
@@ -65,7 +66,12 @@ func _input(event):
 
 func place_block():
 	if !is_overlapping_with_other_mblock(curr_mblock_pieces):
-		curr_mblocks_on_board.append(curr_mblock_pieces)
+		var new_mblock = mblock_scene.instantiate() as MultiBlock
+		new_mblock.mblock_pieces = curr_mblock_pieces
+		curr_mblocks_on_board.append(new_mblock)
+		add_child(new_mblock)
+		for block in curr_mblock_pieces:
+			block.reparent(new_mblock)
 		curr_mblock_pieces = []
 		mblock_type_to_place = MultiBlockType.values().pick_random()
 		curr_mblock_color = Block.BLOCK_COLORS.pick_random()
@@ -101,8 +107,8 @@ func is_overlapping_with_other_mblock(curr_mblock_pieces):
 				return true
 	return false
 
-func does_block_overlap(mblock, block):
-	for b in mblock:
+func does_block_overlap(mblock: MultiBlock, block):
+	for b in mblock.mblock_pieces:
 		if b.board_pos == block.board_pos:
 			return true
 	return false

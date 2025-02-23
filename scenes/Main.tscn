@@ -1,12 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://dramux1asfstc"]
+[gd_scene load_steps=4 format=3 uid="uid://dramux1asfstc"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_l37a8"]
 [ext_resource type="PackedScene" uid="uid://cimhebjccj8f7" path="res://prefabs/Board.tscn" id="2_tikg1"]
+[ext_resource type="PackedScene" uid="uid://g4wsfwcxynop" path="res://prefabs/MultiBlock.tscn" id="3_f7psg"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_l37a8")
 
 [node name="Board" parent="." instance=ExtResource("2_tikg1")]
+mblock_scene = ExtResource("3_f7psg")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.4, 0.4)
