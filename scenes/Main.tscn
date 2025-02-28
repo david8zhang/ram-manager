@@ -1,8 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://dramux1asfstc"]
+[gd_scene load_steps=8 format=3 uid="uid://dramux1asfstc"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_l37a8"]
 [ext_resource type="PackedScene" uid="uid://cimhebjccj8f7" path="res://prefabs/Board.tscn" id="2_tikg1"]
 [ext_resource type="PackedScene" uid="uid://g4wsfwcxynop" path="res://prefabs/MultiBlock.tscn" id="3_f7psg"]
+[ext_resource type="PackedScene" uid="uid://x6puo4ibn3aq" path="res://prefabs/EraseButton.tscn" id="4_l8wks"]
+[ext_resource type="Texture2D" uid="uid://cqb73gea4ntex" path="res://assets/placeholder/Erase2x2.png" id="5_6w2cb"]
+[ext_resource type="Texture2D" uid="uid://da7783n8pugo1" path="res://assets/placeholder/Erase2x4.png" id="6_sebkt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_528pj"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.137255, 0.137255, 0.137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_l37a8")
@@ -10,5 +25,83 @@ script = ExtResource("1_l37a8")
 [node name="Board" parent="." instance=ExtResource("2_tikg1")]
 mblock_scene = ExtResource("3_f7psg")
 
+[node name="PanelContainer" type="PanelContainer" parent="."]
+offset_left = 526.0
+offset_top = -708.0
+offset_right = 891.0
+offset_bottom = 5.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
+
+[node name="Erase1x1" parent="." instance=ExtResource("4_l8wks")]
+position = Vector2(710, -534)
+
+[node name="Erase2x2" parent="." instance=ExtResource("4_l8wks")]
+position = Vector2(709, -345)
+
+[node name="Sprite2D" parent="Erase2x2" index="0"]
+texture = ExtResource("5_6w2cb")
+
+[node name="Button" parent="Erase2x2" index="1"]
+offset_left = -63.0
+offset_top = -64.0
+offset_right = 65.0
+offset_bottom = 64.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Erase2x4" parent="." instance=ExtResource("4_l8wks")]
+position = Vector2(709, -119)
+
+[node name="Sprite2D" parent="Erase2x4" index="0"]
+texture = ExtResource("6_sebkt")
+
+[node name="Button" parent="Erase2x4" index="1"]
+offset_left = -128.0
+offset_top = -64.0
+offset_right = 128.0
+offset_bottom = 64.0
+metadata/_edit_use_anchors_ = true
+
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.4, 0.4)
+
+[node name="Label4" type="Label" parent="."]
+offset_left = 670.0
+offset_top = -223.0
+offset_right = 749.0
+offset_bottom = -185.0
+theme_override_font_sizes/font_size = 25
+text = "2 x 4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 670.0
+offset_top = -450.0
+offset_right = 749.0
+offset_bottom = -412.0
+theme_override_font_sizes/font_size = 25
+text = "2 x 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 670.0
+offset_top = -608.0
+offset_right = 749.0
+offset_bottom = -577.0
+theme_override_font_sizes/font_size = 25
+text = "1 x 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="."]
+offset_left = 578.0
+offset_top = -680.0
+offset_right = 849.0
+offset_bottom = -635.0
+theme_override_font_sizes/font_size = 30
+text = "Deletion Block Size"
+
+[editable path="Erase1x1"]
+[editable path="Erase2x2"]
+[editable path="Erase2x4"]
