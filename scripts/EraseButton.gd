@@ -1,0 +1,21 @@
+class_name EraseButton
+extends Node2D
+
+enum EraseShape {
+	OneByOne,
+	TwoByTwo,
+	TwoByFour
+}
+
+@export var eraser_shape = EraseShape.OneByOne
+@onready var button = $Button as Button
+
+signal select_eraser(shape: EraseShape)
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var on_button_pressed = Callable(self, "eraser_selected")
+	button.pressed.connect(on_button_pressed)
+
+func eraser_selected():
+	select_eraser.emit(eraser_shape)

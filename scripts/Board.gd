@@ -58,7 +58,10 @@ func _process(_delta):
 	var camera = game.camera as Camera2D
 	var mouse_pos = camera.get_global_mouse_position()
 	var board_pos = convert_world_pos_to_board_pos(mouse_pos)
-	preview_place_block(mblock_type_to_place, board_pos)
+	if game.is_erase_mode:
+		preview_eraser_shape(board_pos)
+	else:
+		preview_place_block(mblock_type_to_place, board_pos)
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
@@ -75,6 +78,77 @@ func place_block():
 		curr_mblock_pieces = []
 		mblock_type_to_place = MultiBlockType.values().pick_random()
 		curr_mblock_color = Block.BLOCK_COLORS.pick_random()
+
+func preview_eraser_shape(board_pos: Vector2):
+	clear_eraser_preview()
+	match game.selected_eraser_shape:
+		EraseButton.EraseShape.OneByOne:
+			preview_erase_one_by_one(board_pos)
+		EraseButton.EraseShape.TwoByTwo:
+			preview_erase_two_by_two(board_pos)
+		EraseButton.EraseShape.TwoByFour:
+			preview_erase_two_by_four(board_pos)
+
+func preview_erase_one_by_one(board_pos):
+	for m in curr_mblocks_on_board:
+		for b in m.mblock_pieces:
+			if b.board_pos == board_pos:
+				b.modulate = Color.BLACK
+
+func preview_erase_two_by_two(board_pos):
+	var block_map = generate_block_map()
+	var clamped_row = clamp(board_pos.x, 0, height - 2)
+	var clamped_col = clamp(board_pos.y, 0, width - 2)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[1, 0],
+		[0, 1],
+		[1, 1]
+	]
+	for pos in block_positions:
+		var block_pos = Vector2(clamped_board_pos[0] + pos[0], clamped_board_pos[1] + pos[1])
+		var block = block_map[block_pos[0]][block_pos[1]]
+		if block != null:
+			block.modulate = Color.BLACK
+
+func preview_erase_two_by_four(board_pos):
+	var block_map = generate_block_map()
+	var clamped_row = clamp(board_pos.x, 0, height - 2)
+	var clamped_col = clamp(board_pos.y, 0, width - 4)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
+	var block_positions = [
+		[0, 0],
+		[0, 1],
+		[0, 2],
+		[0, 3],
+		[1, 0],
+		[1, 1],
+		[1, 2],
+		[1, 3]
+	]
+	for pos in block_positions:
+		var block_pos = Vector2(clamped_board_pos[0] + pos[0], clamped_board_pos[1] + pos[1])
+		var block = block_map[block_pos[0]][block_pos[1]]
+		if block != null:
+			block.modulate = Color.BLACK
+
+func generate_block_map():
+	# Construct a 2D array to represent all blocks on board
+	var block_map = []
+	for i in height:
+		block_map.append([])
+		for j in width:
+			block_map[i].append(null)
+	for m in curr_mblocks_on_board:
+		for b in m.mblock_pieces:
+			block_map[b.board_pos.x][b.board_pos.y] = b
+	return block_map
+
+func clear_eraser_preview():
+	for m in curr_mblocks_on_board:
+		for b in m.mblock_pieces:
+			b.modulate = Color(1, 1, 1, 1)
 
 func preview_place_block(mblock_type: MultiBlockType, board_pos: Vector2):
 	clear_curr_block_pieces()

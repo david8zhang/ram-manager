@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_l37a8"]
 [ext_resource type="PackedScene" uid="uid://cimhebjccj8f7" path="res://prefabs/Board.tscn" id="2_tikg1"]
-[ext_resource type="PackedScene" uid="uid://g4wsfwcxynop" path="res://prefabs/MultiBlock.tscn" id="3_f7psg"]
-[ext_resource type="PackedScene" uid="uid://x6puo4ibn3aq" path="res://prefabs/EraseButton.tscn" id="4_l8wks"]
+[ext_resource type="PackedScene" path="res://prefabs/MultiBlock.tscn" id="3_f7psg"]
+[ext_resource type="PackedScene" uid="uid://6rxdfnnkmih8" path="res://prefabs/EraseButton.tscn" id="4_l8wks"]
 [ext_resource type="Texture2D" uid="uid://cqb73gea4ntex" path="res://assets/placeholder/Erase2x2.png" id="5_6w2cb"]
 [ext_resource type="Texture2D" uid="uid://da7783n8pugo1" path="res://assets/placeholder/Erase2x4.png" id="6_sebkt"]
 
@@ -37,6 +37,7 @@ position = Vector2(710, -534)
 
 [node name="Erase2x2" parent="." instance=ExtResource("4_l8wks")]
 position = Vector2(709, -345)
+eraser_shape = 1
 
 [node name="Sprite2D" parent="Erase2x2" index="0"]
 texture = ExtResource("5_6w2cb")
@@ -50,6 +51,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Erase2x4" parent="." instance=ExtResource("4_l8wks")]
 position = Vector2(709, -119)
+eraser_shape = 2
 
 [node name="Sprite2D" parent="Erase2x4" index="0"]
 texture = ExtResource("6_sebkt")
