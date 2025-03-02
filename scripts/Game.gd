@@ -21,5 +21,7 @@ func on_eraser_selected(eraser_shape):
 	is_erase_mode = true
 
 func _process(_delta):
-	if Input.is_action_pressed("disable_erase"):
+	if Input.is_action_just_pressed("disable_erase"):
 		is_erase_mode = false
+	if Input.is_action_just_pressed("rotate"):
+		board.rotate_curr_mblock()

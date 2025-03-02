@@ -1,6 +1,13 @@
 class_name Board
 extends Node2D
 
+enum RotationType {
+	NONE, # None is the same as a full 360 turn
+	QUARTER_TURN,
+	HALF_TURN,
+	THREE_QUARTER_TURN
+}
+
 enum MultiBlockType {
 	LINE,
 	L,
@@ -21,8 +28,8 @@ var block_size = 64
 var width = 10
 var height = 20
 var grid = []
-var mblock_type_to_place = MultiBlockType.T
-
+var mblock_type_to_place = MultiBlockType.J
+var curr_rotation_type  = RotationType.NONE
 var curr_mblock_color = Block.BLOCK_COLORS.pick_random()
 var curr_mblock_pieces = []
 var curr_mblocks_on_board = []
@@ -243,9 +250,9 @@ func clear_curr_block_pieces():
 		piece.queue_free()
 	curr_mblock_pieces = []
 
-func is_overlapping_with_other_mblock(curr_mblock_pieces):
+func is_overlapping_with_other_mblock(curr_pieces):
 	for mblock in curr_mblocks_on_board:
-		for block in curr_mblock_pieces:
+		for block in curr_pieces:
 			if does_block_overlap(mblock, block):
 				return true
 	return false
@@ -272,39 +279,145 @@ func spawn_multi_block(board_pos: Vector2, block_positions):
 		curr_mblock_pieces.append(new_block)
 
 func preview_line_block(board_pos: Vector2):
-	var clamped_row = clamp(board_pos.x, 2, height - 2)
-	var clamped_board_pos = Vector2(clamped_row, board_pos.y)
-	var block_positions = [
-		[-2, 0],
-		[-1, 0],
-		[0, 0],
-		[1, 0]
-	]
-	spawn_multi_block(clamped_board_pos, block_positions)
+	var clamped_board_pos = Vector2.ZERO
+	var block_positions = []
+	match curr_rotation_type:
+		RotationType.QUARTER_TURN, RotationType.THREE_QUARTER_TURN:
+			var clamped_col = clamp(board_pos.y, 2, width - 2)
+			clamped_board_pos = Vector2(board_pos.x, clamped_col)
+			block_positions = [
+				[0, -2],
+				[0, -1],
+				[0, 0],
+				[0, 1]
+			]
+		RotationType.HALF_TURN, RotationType.NONE:
+			var clamped_row = clamp(board_pos.x, 2, height - 2)
+			clamped_board_pos = Vector2(clamped_row, board_pos.y)
+			block_positions = [
+				[-2, 0],
+				[-1, 0],
+				[0, 0],
+				[1, 0]
+			]
+	if clamped_board_pos != Vector2.ZERO:
+		spawn_multi_block(clamped_board_pos, block_positions)
 
+# L Block:
+# *
+# * * *
 func preview_L_block(board_pos: Vector2):
-	var clamped_row = clamp(board_pos.x, 1, height - 1)
-	var clamped_col = clamp(board_pos.y, 1, width - 2)
-	var clamped_board_pos = Vector2(clamped_row, clamped_col)
-	var block_positions = [
-		[0, 0],
-		[0, -1],
-		[0, 1],
-		[-1, -1]
-	]
-	spawn_multi_block(clamped_board_pos, block_positions)
+	var clamped_board_pos = Vector2.ZERO
+	var block_positions = []
+	match curr_rotation_type:
+		# * *
+		# *
+		# *
+		RotationType.QUARTER_TURN:
+			var clamped_row = clamp(board_pos.x, 1, height - 2)
+			var clamped_col = clamp(board_pos.y, 0, width - 2)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[-1, 0],
+				[0, 0],
+				[-1, 1],
+				[1, 0]
+			]
+		# * * *
+		#     *
+		RotationType.HALF_TURN:
+			var clamped_row = clamp(board_pos.x, 0, height - 2)
+			var clamped_col = clamp(board_pos.y, 1, width - 2)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[0, 0],
+				[0, -1],
+				[0, 1],
+				[1, 1]
+			]
+		#   *
+		#   *
+		# * *
+		RotationType.THREE_QUARTER_TURN:
+			var clamped_row = clamp(board_pos.x, 1, height - 2)
+			var clamped_col = clamp(board_pos.y, 1, width - 1)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[0, 0],
+				[-1, 0],
+				[1, 0],
+				[1, -1]
+			]
+		RotationType.NONE:
+			var clamped_row = clamp(board_pos.x, 1, height - 1)
+			var clamped_col = clamp(board_pos.y, 1, width - 2)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[0, 0],
+				[0, -1],
+				[0, 1],
+				[-1, -1]
+			]
+	if clamped_board_pos != Vector2.ZERO:
+		spawn_multi_block(clamped_board_pos, block_positions)
 
+# J Block:
+#     *
+# * * *
 func preview_J_block(board_pos: Vector2):
-	var clamped_row = clamp(board_pos.x, 1, height - 1)
-	var clamped_col = clamp(board_pos.y, 1, width - 2)
-	var clamped_board_pos = Vector2(clamped_row, clamped_col)
-	var block_positions = [
-		[0, 0],
-		[0, -1],
-		[0, 1],
-		[-1, -1]
-	]
-	spawn_multi_block(clamped_board_pos, block_positions)
+	var clamped_board_pos = Vector2.ZERO
+	var block_positions = []
+	match curr_rotation_type:
+		# * 
+		# *
+		# * *
+		RotationType.QUARTER_TURN:
+			var clamped_row = clamp(board_pos.x, 1, height - 2)
+			var clamped_col = clamp(board_pos.y, 0, width - 2)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[0, 0],
+				[-1, 0],
+				[1, 0],
+				[1, 1]
+			]
+		# * * *
+		# *
+		RotationType.HALF_TURN:
+			var clamped_row = clamp(board_pos.x, 0, height - 2)
+			var clamped_col = clamp(board_pos.y, 1, width - 2)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[0, 0],
+				[0, -1],
+				[0, 1],
+				[1, -1]
+			]
+		# * *
+		#   *
+		#   *
+		RotationType.THREE_QUARTER_TURN:
+			var clamped_row = clamp(board_pos.x, 1, height - 2)
+			var clamped_col = clamp(board_pos.y, 1, width - 1)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[0, 0],
+				[-1, 0],
+				[-1, -1],
+				[1, 0]
+			]
+		RotationType.NONE:
+			var clamped_row = clamp(board_pos.x, 1, height - 1)
+			var clamped_col = clamp(board_pos.y, 1, width - 2)
+			clamped_board_pos = Vector2(clamped_row, clamped_col)
+			block_positions = [
+				[0, 0],
+				[0, -1],
+				[0, 1],
+				[-1, 1]
+			]
+	if clamped_board_pos != Vector2.ZERO:
+		spawn_multi_block(clamped_board_pos, block_positions)
 
 func preview_square_block(board_pos: Vector2):
 	var clamped_row = clamp(board_pos.x, 0, height - 2)
@@ -318,6 +431,9 @@ func preview_square_block(board_pos: Vector2):
 	]
 	spawn_multi_block(clamped_board_pos, block_positions)
 
+# S Block:
+#   * *
+# * * 
 func preview_S_block(board_pos: Vector2):
 	var clamped_row = clamp(board_pos.x, 0, height - 2)
 	var clamped_col = clamp(board_pos.y, 1, width - 2)
@@ -330,6 +446,9 @@ func preview_S_block(board_pos: Vector2):
 	]
 	spawn_multi_block(clamped_board_pos, block_positions)
 
+# Z Block:
+# * *
+#   * *
 func preview_Z_block(board_pos: Vector2):
 	var clamped_row = clamp(board_pos.x, 0, height - 2)
 	var clamped_col = clamp(board_pos.y, 1, width - 2)
@@ -342,6 +461,9 @@ func preview_Z_block(board_pos: Vector2):
 	]
 	spawn_multi_block(clamped_board_pos, block_positions)
 
+# (upside down) T Block:
+#   *
+# * * *
 func preview_T_block(board_pos: Vector2):
 	var clamped_row = clamp(board_pos.x, 1, height - 1)
 	var clamped_col = clamp(board_pos.y, 1, width - 2)
@@ -353,3 +475,6 @@ func preview_T_block(board_pos: Vector2):
 		[0, -1]
 	]
 	spawn_multi_block(clamped_board_pos, block_positions)
+
+func rotate_curr_mblock():
+	curr_rotation_type = (curr_rotation_type + 1) % 4 as RotationType
