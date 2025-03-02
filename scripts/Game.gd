@@ -19,3 +19,7 @@ func _ready():
 func on_eraser_selected(eraser_shape):
 	selected_eraser_shape = eraser_shape
 	is_erase_mode = true
+
+func _process(_delta):
+	if Input.is_action_pressed("disable_erase"):
+		is_erase_mode = false
