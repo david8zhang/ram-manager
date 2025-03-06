@@ -3,6 +3,7 @@ extends Node2D
 
 @onready var board = $Board as Board
 @onready var camera = $Camera2D as Camera2D
+@onready var eraser_menu = $EraserMenu as Control
 
 var selected_eraser_shape: EraseButton.EraseShape
 var is_erase_mode = false
@@ -10,7 +11,7 @@ var is_erase_mode = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Wire up erase button selection
-	var children = get_children()
+	var children = eraser_menu.get_children()
 	for child in children:
 		if child is EraseButton:
 			var erase_button = child as EraseButton

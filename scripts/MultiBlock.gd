@@ -9,7 +9,7 @@ var is_active = true
 func _ready():
 	var timer = Timer.new()
 	timer.one_shot = true
-	timer.wait_time = 5.0
+	timer.wait_time = randi_range(15, 30)
 	timer.autostart = true
 	var on_timeout = Callable(self, "on_deactivate").bind(timer)
 	timer.timeout.connect(on_timeout)

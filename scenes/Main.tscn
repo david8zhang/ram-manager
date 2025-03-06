@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_l37a8"]
 [ext_resource type="PackedScene" uid="uid://cimhebjccj8f7" path="res://prefabs/Board.tscn" id="2_tikg1"]
-[ext_resource type="PackedScene" path="res://prefabs/MultiBlock.tscn" id="3_f7psg"]
+[ext_resource type="PackedScene" uid="uid://g4wsfwcxynop" path="res://prefabs/MultiBlock.tscn" id="3_f7psg"]
 [ext_resource type="PackedScene" uid="uid://6rxdfnnkmih8" path="res://prefabs/EraseButton.tscn" id="4_l8wks"]
 [ext_resource type="Texture2D" uid="uid://cqb73gea4ntex" path="res://assets/placeholder/Erase2x2.png" id="5_6w2cb"]
 [ext_resource type="Texture2D" uid="uid://da7783n8pugo1" path="res://assets/placeholder/Erase2x4.png" id="6_sebkt"]
@@ -25,85 +25,106 @@ script = ExtResource("1_l37a8")
 [node name="Board" parent="." instance=ExtResource("2_tikg1")]
 mblock_scene = ExtResource("3_f7psg")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PieceMenu" type="PanelContainer" parent="."]
+offset_left = 527.0
+offset_top = 69.0
+offset_right = 892.0
+offset_bottom = 703.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
+
+[node name="PieceMenuTitleLabel" type="Label" parent="."]
+offset_left = 536.0
+offset_top = 95.0
+offset_right = 881.0
+offset_bottom = 140.0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Next Piece"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EraserMenu" type="PanelContainer" parent="."]
 offset_left = 526.0
 offset_top = -708.0
 offset_right = 891.0
 offset_bottom = 5.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
 
-[node name="Erase1x1" parent="." instance=ExtResource("4_l8wks")]
-position = Vector2(710, -534)
+[node name="Erase1x1" parent="EraserMenu" instance=ExtResource("4_l8wks")]
+position = Vector2(184, 174)
 
-[node name="Erase2x2" parent="." instance=ExtResource("4_l8wks")]
-position = Vector2(709, -345)
+[node name="Erase2x2" parent="EraserMenu" instance=ExtResource("4_l8wks")]
+position = Vector2(183, 363)
 eraser_shape = 1
 
-[node name="Sprite2D" parent="Erase2x2" index="0"]
+[node name="Sprite2D" parent="EraserMenu/Erase2x2" index="0"]
 texture = ExtResource("5_6w2cb")
 
-[node name="Button" parent="Erase2x2" index="1"]
+[node name="Button" parent="EraserMenu/Erase2x2" index="1"]
 offset_left = -63.0
 offset_top = -64.0
 offset_right = 65.0
 offset_bottom = 64.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Erase2x4" parent="." instance=ExtResource("4_l8wks")]
-position = Vector2(709, -119)
+[node name="Erase2x4" parent="EraserMenu" instance=ExtResource("4_l8wks")]
+position = Vector2(183, 589)
 eraser_shape = 2
 
-[node name="Sprite2D" parent="Erase2x4" index="0"]
+[node name="Sprite2D" parent="EraserMenu/Erase2x4" index="0"]
 texture = ExtResource("6_sebkt")
 
-[node name="Button" parent="Erase2x4" index="1"]
+[node name="Button" parent="EraserMenu/Erase2x4" index="1"]
 offset_left = -128.0
 offset_top = -64.0
 offset_right = 128.0
 offset_bottom = 64.0
 metadata/_edit_use_anchors_ = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.4, 0.4)
-
-[node name="Label4" type="Label" parent="."]
-offset_left = 670.0
-offset_top = -223.0
-offset_right = 749.0
-offset_bottom = -185.0
-theme_override_font_sizes/font_size = 25
-text = "2 x 4"
+[node name="EraserMenuTitleLabel" type="Label" parent="."]
+offset_left = 536.0
+offset_top = -690.0
+offset_right = 881.0
+offset_bottom = -645.0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Deletion Block Size"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label3" type="Label" parent="."]
-offset_left = 670.0
-offset_top = -450.0
-offset_right = 749.0
-offset_bottom = -412.0
-theme_override_font_sizes/font_size = 25
-text = "2 x 2"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Label2" type="Label" parent="."]
-offset_left = 670.0
-offset_top = -608.0
-offset_right = 749.0
-offset_bottom = -577.0
-theme_override_font_sizes/font_size = 25
+[node name="1x1Label" type="Label" parent="."]
+offset_left = 536.0
+offset_top = -617.0
+offset_right = 881.0
+offset_bottom = -572.0
+theme_override_font_sizes/font_size = 30
 text = "1 x 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="."]
-offset_left = 578.0
-offset_top = -680.0
-offset_right = 849.0
-offset_bottom = -635.0
+[node name="2x2Label" type="Label" parent="."]
+offset_left = 536.0
+offset_top = -458.0
+offset_right = 881.0
+offset_bottom = -413.0
 theme_override_font_sizes/font_size = 30
-text = "Deletion Block Size"
+text = "2 x 2"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[editable path="Erase1x1"]
-[editable path="Erase2x2"]
-[editable path="Erase2x4"]
+[node name="2x4Label" type="Label" parent="."]
+offset_left = 536.0
+offset_top = -236.0
+offset_right = 881.0
+offset_bottom = -191.0
+theme_override_font_sizes/font_size = 30
+text = "2 x 4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.4, 0.4)
+
+[editable path="EraserMenu/Erase1x1"]
+[editable path="EraserMenu/Erase2x2"]
+[editable path="EraserMenu/Erase2x4"]

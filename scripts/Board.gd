@@ -18,6 +18,16 @@ enum MultiBlockType {
 	T
 }
 
+var mblock_to_color_mapping = [
+	"LightBlue",
+	"Blue",
+	"Orange",
+	"Yellow",
+	"Green",
+	"Purple",
+	"Red"
+]
+
 @onready var sprite = $Sprite2D
 @onready var game = get_node("/root/Main") as Game
 @export var block_scene: PackedScene
@@ -30,7 +40,7 @@ var height = 20
 var grid = []
 var mblock_type_to_place = MultiBlockType.T
 var curr_rotation_type  = RotationType.NONE
-var curr_mblock_color = Block.BLOCK_COLORS.pick_random()
+var curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
 var curr_mblock_pieces = []
 var curr_mblocks_on_board = []
 
@@ -87,7 +97,7 @@ func place_block():
 			block.reparent(new_mblock)
 		curr_mblock_pieces = []
 		mblock_type_to_place = MultiBlockType.values().pick_random()
-		curr_mblock_color = Block.BLOCK_COLORS.pick_random()
+		curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
 
 func erase_block():
 	var camera = game.camera as Camera2D
