@@ -14,14 +14,14 @@ enum MultiBlockType {
 	J,
 	SQUARE,
 	S,
-	Z,
-	T
+	T,
+	Z
 }
 
 var mblock_to_color_mapping = [
 	"LightBlue",
-	"Blue",
 	"Orange",
+	"Blue",
 	"Yellow",
 	"Green",
 	"Purple",
@@ -96,7 +96,8 @@ func place_block():
 		for block in curr_mblock_pieces:
 			block.reparent(new_mblock)
 		curr_mblock_pieces = []
-		mblock_type_to_place = MultiBlockType.values().pick_random()
+		mblock_type_to_place = game.piece_menu.next_piece_type
+		game.piece_menu.pick_next_random_piece()
 		curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
 
 func erase_block():

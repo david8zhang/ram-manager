@@ -1,13 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://dramux1asfstc"]
+[gd_scene load_steps=11 format=3 uid="uid://dramux1asfstc"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_l37a8"]
 [ext_resource type="PackedScene" uid="uid://cimhebjccj8f7" path="res://prefabs/Board.tscn" id="2_tikg1"]
 [ext_resource type="PackedScene" uid="uid://g4wsfwcxynop" path="res://prefabs/MultiBlock.tscn" id="3_f7psg"]
+[ext_resource type="Script" path="res://scripts/PieceMenu.gd" id="4_gveeo"]
 [ext_resource type="PackedScene" uid="uid://6rxdfnnkmih8" path="res://prefabs/EraseButton.tscn" id="4_l8wks"]
+[ext_resource type="Script" path="res://scripts/LivesMenu.gd" id="4_pxgcd"]
 [ext_resource type="Texture2D" uid="uid://cqb73gea4ntex" path="res://assets/placeholder/Erase2x2.png" id="5_6w2cb"]
+[ext_resource type="Texture2D" uid="uid://bcevspw7gvh4a" path="res://assets/placeholder/multi/I.png" id="5_24mnn"]
 [ext_resource type="Texture2D" uid="uid://da7783n8pugo1" path="res://assets/placeholder/Erase2x4.png" id="6_sebkt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_528pj"]
+content_margin_left = 0.0
+content_margin_top = 25.0
+content_margin_right = 0.0
+content_margin_bottom = 25.0
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 10
 border_width_top = 10
@@ -25,29 +32,77 @@ script = ExtResource("1_l37a8")
 [node name="Board" parent="." instance=ExtResource("2_tikg1")]
 mblock_scene = ExtResource("3_f7psg")
 
-[node name="PieceMenu" type="PanelContainer" parent="."]
-offset_left = 527.0
-offset_top = 69.0
-offset_right = 892.0
-offset_bottom = 703.0
+[node name="LivesMenu" type="PanelContainer" parent="."]
+offset_left = 439.0
+offset_top = -699.0
+offset_right = 802.0
+offset_bottom = -439.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
+script = ExtResource("4_pxgcd")
 
-[node name="PieceMenuTitleLabel" type="Label" parent="."]
-offset_left = 536.0
-offset_top = 95.0
-offset_right = 881.0
-offset_bottom = 140.0
+[node name="VBoxContainer" type="VBoxContainer" parent="LivesMenu"]
+layout_mode = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="LivesMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Remaining Lives"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LivesLabel" type="Label" parent="LivesMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 60
+text = "3
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PieceMenu" type="PanelContainer" parent="."]
+offset_left = 440.0
+offset_top = -405.0
+offset_right = 805.0
+offset_bottom = 55.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
+script = ExtResource("4_gveeo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PieceMenu"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="PieceMenuTitleLabel" type="Label" parent="PieceMenu/VBoxContainer"]
+layout_mode = 2
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "Next Piece"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="TextureRect" type="TextureRect" parent="PieceMenu/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("5_24mnn")
+expand_mode = 4
+stretch_mode = 3
+
+[node name="PieceMenuCountdown" type="Label" parent="PieceMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="EraserMenu" type="PanelContainer" parent="."]
-offset_left = 526.0
-offset_top = -708.0
-offset_right = 891.0
-offset_bottom = 5.0
+offset_left = -832.0
+offset_top = -702.0
+offset_right = -467.0
+offset_bottom = 11.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
 
 [node name="Erase1x1" parent="EraserMenu" instance=ExtResource("4_l8wks")]
@@ -82,10 +137,10 @@ offset_bottom = 64.0
 metadata/_edit_use_anchors_ = true
 
 [node name="EraserMenuTitleLabel" type="Label" parent="."]
-offset_left = 536.0
-offset_top = -690.0
-offset_right = 881.0
-offset_bottom = -645.0
+offset_left = -822.0
+offset_top = -684.0
+offset_right = -477.0
+offset_bottom = -639.0
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "Deletion Block Size"
@@ -93,30 +148,30 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="1x1Label" type="Label" parent="."]
-offset_left = 536.0
-offset_top = -617.0
-offset_right = 881.0
-offset_bottom = -572.0
+offset_left = -822.0
+offset_top = -611.0
+offset_right = -477.0
+offset_bottom = -566.0
 theme_override_font_sizes/font_size = 30
 text = "1 x 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="2x2Label" type="Label" parent="."]
-offset_left = 536.0
-offset_top = -458.0
-offset_right = 881.0
-offset_bottom = -413.0
+offset_left = -822.0
+offset_top = -452.0
+offset_right = -477.0
+offset_bottom = -407.0
 theme_override_font_sizes/font_size = 30
 text = "2 x 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="2x4Label" type="Label" parent="."]
-offset_left = 536.0
-offset_top = -236.0
-offset_right = 881.0
-offset_bottom = -191.0
+offset_left = -822.0
+offset_top = -230.0
+offset_right = -477.0
+offset_bottom = -185.0
 theme_override_font_sizes/font_size = 30
 text = "2 x 4"
 horizontal_alignment = 1
@@ -124,6 +179,12 @@ vertical_alignment = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.4, 0.4)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [editable path="EraserMenu/Erase1x1"]
 [editable path="EraserMenu/Erase2x2"]
