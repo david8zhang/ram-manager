@@ -51,14 +51,13 @@ func _ready():
 	var top_left_x = sprite.global_position.x - (block_size * (width / 2))
 	var top_left_y = sprite.global_position.y - (block_size * (height / 2))
 	top_left = Vector2(top_left_x, top_left_y)
-	init_grid()
+	init_locked_rows()
 
-# Initialize board grid
-func init_grid():
-	for i in height:
-		grid.append([])
-		for j in width:
-			grid[i].append(false)
+func init_locked_rows():
+	for i in range(0, height):
+		for j in range(0, width):
+			if not ((i >= num_locked_rows and i < height - num_locked_rows) and (j >= num_locked_cols and j < width - num_locked_cols)):
+				spawn_block(Vector2(i, j), "DarkGray")
 
 func convert_world_pos_to_board_pos(world_pos: Vector2):
 	var board_col = floor((world_pos.x - top_left.x) / block_size)
@@ -279,11 +278,11 @@ func does_block_overlap(mblock: MultiBlock, block):
 			return true
 	return false
 
-func spawn_block(block_pos: Vector2) -> Sprite2D:
+func spawn_block(block_pos: Vector2, color) -> Sprite2D:
 	var world_pos = convert_board_pos_to_world_pos(block_pos)
 	var new_block = block_scene.instantiate() as Block
 	new_block.board_pos = block_pos
-	new_block.curr_color = curr_mblock_color
+	new_block.curr_color = color
 	add_child(new_block)
 	new_block.global_position = world_pos
 	return new_block
@@ -291,7 +290,7 @@ func spawn_block(block_pos: Vector2) -> Sprite2D:
 func spawn_multi_block(board_pos: Vector2, block_positions):
 	for pos in block_positions:
 		var block_pos = Vector2(board_pos.x + pos[0], board_pos.y + pos[1])
-		var new_block = spawn_block(block_pos)
+		var new_block = spawn_block(block_pos, curr_mblock_color)
 		curr_mblock_pieces.append(new_block)
 
 func preview_line_block(board_pos: Vector2):
