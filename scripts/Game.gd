@@ -7,12 +7,15 @@ extends Node2D
 @onready var erase_one_by_one = $EraserMenu/Erase1x1 as EraseButton
 @onready var erase_two_by_two = $EraserMenu/Erase2x2 as EraseButton
 @onready var erase_two_by_four = $EraserMenu/Erase2x4 as EraseButton
-
+@onready var score_label = $ScoreLabel as Label
 @onready var piece_menu = $PieceMenu as PieceMenu
 @onready var lives_menu = $LivesMenu as LivesMenu
 
 var selected_eraser_shape: EraseButton.EraseShape
 var is_erase_mode = false
+var curr_score = 0
+
+const BLOCK_PLACE_SCORE = 100
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -31,7 +34,8 @@ func on_eraser_selected(eraser_shape):
 	is_erase_mode = true
 
 func updated_score():
-	print("Updated score!")
+	curr_score += BLOCK_PLACE_SCORE
+	score_label.text = "Score: " + str(curr_score)
 
 func _process(_delta):
 	if Input.is_action_just_pressed("disable_erase"):
