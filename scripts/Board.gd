@@ -47,6 +47,7 @@ var curr_mblock_pieces = []
 var curr_mblocks_on_board = []
 
 signal block_placed
+signal block_erased
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -117,12 +118,17 @@ func erase_block():
 			erase_two_by_four(board_pos)
 
 func erase_one_by_one(board_pos: Vector2):
+	var did_erase = false
 	for m in curr_mblocks_on_board:
 		for b in m.mblock_pieces:
 			if is_instance_valid(b) and b.board_pos == board_pos and !b.is_active:
 				b.erase()
+				did_erase = true
+	if did_erase:
+		block_erased.emit()
 
 func erase_two_by_two(board_pos):
+	var did_erase = false
 	var block_map = generate_block_map()
 	var clamped_row = clamp(board_pos.x, 0, height - 2)
 	var clamped_col = clamp(board_pos.y, 0, width - 2)
@@ -137,11 +143,15 @@ func erase_two_by_two(board_pos):
 		var block_pos = Vector2(clamped_board_pos[0] + pos[0], clamped_board_pos[1] + pos[1])
 		var block = block_map[block_pos[0]][block_pos[1]]
 		if block != null and !block.is_active:
+			did_erase = true
 			block.erase()
 			var mblock = block.get_parent() as MultiBlock
 			mblock.handle_erase()
+	if did_erase:
+		block_erased.emit()
 
 func erase_two_by_four(board_pos):
+	var did_erase = false
 	var block_map = generate_block_map()
 	var clamped_row = clamp(board_pos.x, 0, height - 2)
 	var clamped_col = clamp(board_pos.y, 0, width - 4)
@@ -160,9 +170,12 @@ func erase_two_by_four(board_pos):
 		var block_pos = Vector2(clamped_board_pos[0] + pos[0], clamped_board_pos[1] + pos[1])
 		var block = block_map[block_pos[0]][block_pos[1]]
 		if block != null and !block.is_active:
+			did_erase = true
 			block.erase()
 			var mblock = block.get_parent() as MultiBlock
 			mblock.handle_erase()
+	if did_erase:
+		block_erased.emit()
 
 func remove_mblock(mblock: MultiBlock):
 	curr_mblocks_on_board = curr_mblocks_on_board.filter(func (m): return m != mblock)

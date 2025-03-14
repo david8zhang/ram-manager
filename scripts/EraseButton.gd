@@ -20,3 +20,15 @@ func _ready():
 
 func eraser_selected():
 	select_eraser.emit(eraser_shape)
+
+func begin_cooldown():
+	panel.show()
+	var timer = Timer.new()
+	timer.wait_time = 5.0
+	timer.autostart = true
+	timer.one_shot = true
+	timer.timeout.connect(end_cooldown)
+	add_child(timer)
+
+func end_cooldown():
+	panel.hide()

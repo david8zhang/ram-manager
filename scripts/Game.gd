@@ -4,6 +4,10 @@ extends Node2D
 @onready var board = $Board as Board
 @onready var camera = $Camera2D as Camera2D
 @onready var eraser_menu = $EraserMenu as Control
+@onready var erase_one_by_one = $EraserMenu/Erase1x1 as EraseButton
+@onready var erase_two_by_two = $EraserMenu/Erase2x2 as EraseButton
+@onready var erase_two_by_four = $EraserMenu/Erase2x4 as EraseButton
+
 @onready var piece_menu = $PieceMenu as PieceMenu
 @onready var lives_menu = $LivesMenu as LivesMenu
 
@@ -20,6 +24,7 @@ func _ready():
 			erase_button.select_eraser.connect(on_eraser_selected)
 	piece_menu.timer_expired.connect(handle_life_decrease)
 	board.block_placed.connect(updated_score)
+	board.block_erased.connect(block_erased)
 
 func on_eraser_selected(eraser_shape):
 	selected_eraser_shape = eraser_shape
@@ -37,3 +42,12 @@ func _process(_delta):
 
 func handle_life_decrease():
 	lives_menu.decrease_lives()
+
+func block_erased():
+	match selected_eraser_shape:
+		EraseButton.EraseShape.OneByOne:
+			erase_one_by_one.begin_cooldown()
+		EraseButton.EraseShape.TwoByTwo:
+			erase_two_by_two.begin_cooldown()
+		EraseButton.EraseShape.TwoByFour:
+			erase_two_by_four.begin_cooldown()
