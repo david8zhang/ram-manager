@@ -19,13 +19,18 @@ func _ready():
 			var erase_button = child as EraseButton
 			erase_button.select_eraser.connect(on_eraser_selected)
 	piece_menu.timer_expired.connect(handle_life_decrease)
+	board.block_placed.connect(updated_score)
 
 func on_eraser_selected(eraser_shape):
 	selected_eraser_shape = eraser_shape
 	is_erase_mode = true
 
+func updated_score():
+	print("Updated score!")
+
 func _process(_delta):
 	if Input.is_action_just_pressed("disable_erase"):
+		board.clear_eraser_preview()
 		is_erase_mode = false
 	if Input.is_action_just_pressed("rotate"):
 		board.rotate_curr_mblock()

@@ -32,7 +32,7 @@ var mblock_to_color_mapping = [
 @onready var game = get_node("/root/Main") as Game
 @export var block_scene: PackedScene
 @export var mblock_scene: PackedScene
-@export var num_locked_rows = 4
+@export var num_locked_rows = 2
 @export var num_locked_cols = 2
 
 var top_left: Vector2
@@ -45,6 +45,8 @@ var curr_rotation_type  = RotationType.NONE
 var curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
 var curr_mblock_pieces = []
 var curr_mblocks_on_board = []
+
+signal block_placed
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -100,6 +102,7 @@ func place_block():
 		mblock_type_to_place = game.piece_menu.next_piece_type
 		game.piece_menu.pick_next_random_piece()
 		curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
+		block_placed.emit()
 
 func erase_block():
 	var camera = game.camera as Camera2D
@@ -116,7 +119,7 @@ func erase_block():
 func erase_one_by_one(board_pos: Vector2):
 	for m in curr_mblocks_on_board:
 		for b in m.mblock_pieces:
-			if b.board_pos == board_pos and !b.is_active:
+			if is_instance_valid(b) and b.board_pos == board_pos and !b.is_active:
 				b.erase()
 
 func erase_two_by_two(board_pos):
@@ -161,7 +164,6 @@ func erase_two_by_four(board_pos):
 			var mblock = block.get_parent() as MultiBlock
 			mblock.handle_erase()
 
-
 func remove_mblock(mblock: MultiBlock):
 	curr_mblocks_on_board = curr_mblocks_on_board.filter(func (m): return m != mblock)
 
@@ -181,7 +183,7 @@ func preview_erase_one_by_one(board_pos):
 	var clamped_board_pos = Vector2(clamped_row, clamped_col)
 	for m in curr_mblocks_on_board:
 		for b in m.mblock_pieces:
-			if b.board_pos == clamped_board_pos:
+			if is_instance_valid(b) and b.board_pos == clamped_board_pos:
 				b.modulate = Color.BLACK
 
 func preview_erase_two_by_two(board_pos):

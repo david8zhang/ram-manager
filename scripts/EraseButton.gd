@@ -9,6 +9,7 @@ enum EraseShape {
 
 @export var eraser_shape = EraseShape.OneByOne
 @onready var button = $Button as Button
+@onready var panel = $Panel as Panel
 
 signal select_eraser(shape: EraseShape)
 

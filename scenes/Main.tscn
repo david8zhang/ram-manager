@@ -108,33 +108,84 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
 [node name="Erase1x1" parent="EraserMenu" instance=ExtResource("4_l8wks")]
 position = Vector2(184, 174)
 
+[node name="TypeLabel" type="Label" parent="EraserMenu/Erase1x1"]
+offset_left = -174.0
+offset_top = -83.0
+offset_right = 171.0
+offset_bottom = -38.0
+theme_override_font_sizes/font_size = 30
+text = "1 x 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" parent="EraserMenu/Erase1x1" index="3"]
+visible = false
+offset_left = -176.0
+offset_top = -100.0
+offset_right = 174.0
+offset_bottom = 73.0
+
 [node name="Erase2x2" parent="EraserMenu" instance=ExtResource("4_l8wks")]
 position = Vector2(183, 363)
 eraser_shape = 1
 
-[node name="Sprite2D" parent="EraserMenu/Erase2x2" index="0"]
+[node name="TypeLabel" type="Label" parent="EraserMenu/Erase2x2"]
+offset_left = -173.0
+offset_top = -113.0
+offset_right = 172.0
+offset_bottom = -68.0
+theme_override_font_sizes/font_size = 30
+text = "2 x 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sprite2D" parent="EraserMenu/Erase2x2" index="1"]
 texture = ExtResource("5_6w2cb")
 
-[node name="Button" parent="EraserMenu/Erase2x2" index="1"]
+[node name="Button" parent="EraserMenu/Erase2x2" index="2"]
 offset_left = -63.0
 offset_top = -64.0
 offset_right = 65.0
 offset_bottom = 64.0
 metadata/_edit_use_anchors_ = true
 
+[node name="Panel" parent="EraserMenu/Erase2x2" index="3"]
+visible = false
+offset_left = -174.0
+offset_top = -116.0
+offset_right = 176.0
+offset_bottom = 99.0
+
 [node name="Erase2x4" parent="EraserMenu" instance=ExtResource("4_l8wks")]
 position = Vector2(183, 589)
 eraser_shape = 2
 
-[node name="Sprite2D" parent="EraserMenu/Erase2x4" index="0"]
+[node name="TypeLabel" type="Label" parent="EraserMenu/Erase2x4"]
+offset_left = -173.0
+offset_top = -117.0
+offset_right = 172.0
+offset_bottom = -72.0
+theme_override_font_sizes/font_size = 30
+text = "2 x 4"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sprite2D" parent="EraserMenu/Erase2x4" index="1"]
 texture = ExtResource("6_sebkt")
 
-[node name="Button" parent="EraserMenu/Erase2x4" index="1"]
+[node name="Button" parent="EraserMenu/Erase2x4" index="2"]
 offset_left = -128.0
 offset_top = -64.0
 offset_right = 128.0
 offset_bottom = 64.0
 metadata/_edit_use_anchors_ = true
+
+[node name="Panel" parent="EraserMenu/Erase2x4" index="3"]
+visible = false
+offset_left = -174.0
+offset_top = -127.0
+offset_right = 176.0
+offset_bottom = 113.0
 
 [node name="EraserMenuTitleLabel" type="Label" parent="."]
 offset_left = -822.0
@@ -147,44 +198,18 @@ text = "Deletion Block Size"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="1x1Label" type="Label" parent="."]
-offset_left = -822.0
-offset_top = -611.0
-offset_right = -477.0
-offset_bottom = -566.0
-theme_override_font_sizes/font_size = 30
-text = "1 x 1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="2x2Label" type="Label" parent="."]
-offset_left = -822.0
-offset_top = -452.0
-offset_right = -477.0
-offset_bottom = -407.0
-theme_override_font_sizes/font_size = 30
-text = "2 x 2"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="2x4Label" type="Label" parent="."]
-offset_left = -822.0
-offset_top = -230.0
-offset_right = -477.0
-offset_bottom = -185.0
-theme_override_font_sizes/font_size = 30
-text = "2 x 4"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.4, 0.4)
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = -365.0
+offset_top = -814.0
+offset_right = 365.0
+offset_bottom = -711.0
+theme_override_font_sizes/font_size = 40
+text = "Score: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [editable path="EraserMenu/Erase1x1"]
 [editable path="EraserMenu/Erase2x2"]

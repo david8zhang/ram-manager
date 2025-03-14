@@ -4,7 +4,8 @@ extends PanelContainer
 @onready var next_piece_type
 @onready var next_piece_preview = $VBoxContainer/TextureRect as TextureRect
 @onready var countdown_timer_label = $VBoxContainer/PieceMenuCountdown as Label
-var countdown_seconds = 5
+var initial_countdown_seconds = 20
+var countdown_seconds = initial_countdown_seconds
 var countdown_timer: Timer
 
 signal timer_expired
@@ -42,7 +43,7 @@ func timer_tick():
 		countdown_timer_label.text = str(countdown_seconds)
 
 func restart_timer():
-	countdown_seconds = 5
+	countdown_seconds = initial_countdown_seconds
 	countdown_timer_label.text = str(countdown_seconds)
 	countdown_timer.start()
 

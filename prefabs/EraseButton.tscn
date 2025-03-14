@@ -25,3 +25,9 @@ offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_qsi2a")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = -75.0
+offset_top = -45.0
+offset_right = 77.0
+offset_bottom = 40.0
