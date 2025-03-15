@@ -47,6 +47,10 @@ func restart_timer():
 	countdown_timer_label.text = str(countdown_seconds)
 	countdown_timer.start()
 
+func set_new_expiry_timer(new_countdown_seconds):
+	initial_countdown_seconds = new_countdown_seconds
+	restart_timer()
+
 func pick_next_random_piece():
 	if countdown_timer != null:
 		restart_timer()

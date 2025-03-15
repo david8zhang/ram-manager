@@ -32,8 +32,8 @@ var mblock_to_color_mapping = [
 @onready var game = get_node("/root/Main") as Game
 @export var block_scene: PackedScene
 @export var mblock_scene: PackedScene
-@export var num_locked_rows = 2
 @export var num_locked_cols = 2
+@export var num_locked_rows = 5
 
 # For checking bounds of board
 var top_left: Vector2
@@ -48,6 +48,7 @@ var curr_rotation_type  = RotationType.NONE
 var curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
 var curr_mblock_pieces = []
 var curr_mblocks_on_board = []
+var locked_row_col_blocks = []
 
 signal block_placed
 signal block_erased
@@ -66,7 +67,16 @@ func init_locked_rows():
 	for i in range(0, height):
 		for j in range(0, width):
 			if not ((i >= num_locked_rows and i < height - num_locked_rows) and (j >= num_locked_cols and j < width - num_locked_cols)):
-				spawn_block(Vector2(i, j), "DarkGray")
+				locked_row_col_blocks.append(spawn_block(Vector2(i, j), "DarkGray"))
+
+func set_new_locked_cols_and_rows(new_locked_cols: int, new_locked_rows: int):
+	num_locked_rows = new_locked_cols
+	num_locked_cols = new_locked_rows
+	for b in locked_row_col_blocks:
+		b.queue_free()
+	locked_row_col_blocks = []
+	init_locked_rows()
+
 
 func convert_world_pos_to_board_pos(world_pos: Vector2):
 	var board_col = floor((world_pos.x - top_left.x) / block_size)

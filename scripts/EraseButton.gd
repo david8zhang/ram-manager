@@ -10,6 +10,7 @@ enum EraseShape {
 @export var eraser_shape = EraseShape.OneByOne
 @onready var button = $Button as Button
 @onready var panel = $Panel as Panel
+var is_on_cooldown = false
 
 signal select_eraser(shape: EraseShape)
 
@@ -22,6 +23,7 @@ func eraser_selected():
 	select_eraser.emit(eraser_shape)
 
 func begin_cooldown():
+	is_on_cooldown = true
 	panel.show()
 	var timer = Timer.new()
 	timer.wait_time = get_cooldown_for_erase_shape()
@@ -31,6 +33,7 @@ func begin_cooldown():
 	add_child(timer)
 
 func end_cooldown():
+	is_on_cooldown = false
 	panel.hide()
 
 func get_cooldown_for_erase_shape():
