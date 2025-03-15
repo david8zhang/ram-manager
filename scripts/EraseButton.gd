@@ -24,7 +24,7 @@ func eraser_selected():
 func begin_cooldown():
 	panel.show()
 	var timer = Timer.new()
-	timer.wait_time = 5.0
+	timer.wait_time = get_cooldown_for_erase_shape()
 	timer.autostart = true
 	timer.one_shot = true
 	timer.timeout.connect(end_cooldown)
@@ -32,3 +32,12 @@ func begin_cooldown():
 
 func end_cooldown():
 	panel.hide()
+
+func get_cooldown_for_erase_shape():
+	match eraser_shape:
+		EraseShape.OneByOne:
+			return 1.5
+		EraseShape.TwoByTwo:
+			return 3.0
+		EraseShape.TwoByFour:
+			return 5.0

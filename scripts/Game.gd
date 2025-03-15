@@ -55,3 +55,5 @@ func block_erased():
 			erase_two_by_two.begin_cooldown()
 		EraseButton.EraseShape.TwoByFour:
 			erase_two_by_four.begin_cooldown()
+	board.clear_eraser_preview()
+	is_erase_mode = false

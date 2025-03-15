@@ -35,12 +35,15 @@ var mblock_to_color_mapping = [
 @export var num_locked_rows = 2
 @export var num_locked_cols = 2
 
+# For checking bounds of board
 var top_left: Vector2
+var bottom_right: Vector2
+
 var block_size = 64
 var width = 10
 var height = 20
 var grid = []
-var mblock_type_to_place = MultiBlockType.T
+var mblock_type_to_place = MultiBlockType.LINE
 var curr_rotation_type  = RotationType.NONE
 var curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
 var curr_mblock_pieces = []
@@ -53,7 +56,10 @@ signal block_erased
 func _ready():
 	var top_left_x = sprite.global_position.x - (block_size * (width / 2))
 	var top_left_y = sprite.global_position.y - (block_size * (height / 2))
+	var bottom_right_x = sprite.global_position.x + (block_size * (width / 2))
+	var bottom_right_y = sprite.global_position.y + (block_size * (height / 2))
 	top_left = Vector2(top_left_x, top_left_y)
+	bottom_right = Vector2(bottom_right_x, bottom_right_y)
 	init_locked_rows()
 
 func init_locked_rows():
@@ -92,7 +98,7 @@ func _input(event):
 			place_block()
 
 func place_block():
-	if !is_overlapping_with_other_mblock(curr_mblock_pieces):
+	if !is_overlapping_with_other_mblock(curr_mblock_pieces) and is_mouse_pos_in_bounds():
 		var new_mblock = mblock_scene.instantiate() as MultiBlock
 		new_mblock.mblock_pieces = curr_mblock_pieces
 		curr_mblocks_on_board.append(new_mblock)
@@ -104,6 +110,11 @@ func place_block():
 		game.piece_menu.pick_next_random_piece()
 		curr_mblock_color = mblock_to_color_mapping[mblock_type_to_place as int]
 		block_placed.emit()
+
+func is_mouse_pos_in_bounds():
+	var camera = game.camera as Camera2D
+	var mouse_pos = camera.get_global_mouse_position()
+	return mouse_pos.x >= top_left.x and mouse_pos.y >= top_left.y and mouse_pos.x <= bottom_right.x and mouse_pos.y <= bottom_right.y
 
 func erase_block():
 	var camera = game.camera as Camera2D
@@ -118,10 +129,13 @@ func erase_block():
 			erase_two_by_four(board_pos)
 
 func erase_one_by_one(board_pos: Vector2):
+	var clamped_row = clamp(board_pos.x, num_locked_rows, height - 1 - num_locked_rows)
+	var clamped_col = clamp(board_pos.y, num_locked_cols, width - 1 - num_locked_cols)
+	var clamped_board_pos = Vector2(clamped_row, clamped_col)
 	var did_erase = false
 	for m in curr_mblocks_on_board:
 		for b in m.mblock_pieces:
-			if is_instance_valid(b) and b.board_pos == board_pos and !b.is_active:
+			if is_instance_valid(b) and b.board_pos == clamped_board_pos and !b.is_active:
 				b.erase()
 				did_erase = true
 	if did_erase:
@@ -130,8 +144,8 @@ func erase_one_by_one(board_pos: Vector2):
 func erase_two_by_two(board_pos):
 	var did_erase = false
 	var block_map = generate_block_map()
-	var clamped_row = clamp(board_pos.x, 0, height - 2)
-	var clamped_col = clamp(board_pos.y, 0, width - 2)
+	var clamped_row = clamp(board_pos.x, num_locked_rows, height - 2 - num_locked_rows)
+	var clamped_col = clamp(board_pos.y, num_locked_cols, width - 2 - num_locked_cols)
 	var clamped_board_pos = Vector2(clamped_row, clamped_col)
 	var block_positions = [
 		[0, 0],
@@ -153,8 +167,8 @@ func erase_two_by_two(board_pos):
 func erase_two_by_four(board_pos):
 	var did_erase = false
 	var block_map = generate_block_map()
-	var clamped_row = clamp(board_pos.x, 0, height - 2)
-	var clamped_col = clamp(board_pos.y, 0, width - 4)
+	var clamped_row = clamp(board_pos.x, num_locked_rows, height - 2 - num_locked_rows)
+	var clamped_col = clamp(board_pos.y, num_locked_cols, width - 4 - num_locked_cols)
 	var clamped_board_pos = Vector2(clamped_row, clamped_col)
 	var block_positions = [
 		[0, 0],
@@ -213,7 +227,7 @@ func preview_erase_two_by_two(board_pos):
 	for pos in block_positions:
 		var block_pos = Vector2(clamped_board_pos[0] + pos[0], clamped_board_pos[1] + pos[1])
 		var block = block_map[block_pos[0]][block_pos[1]]
-		if block != null:
+		if block != null and !block.is_active:
 			block.modulate = Color.BLACK
 
 func preview_erase_two_by_four(board_pos):
@@ -234,7 +248,7 @@ func preview_erase_two_by_four(board_pos):
 	for pos in block_positions:
 		var block_pos = Vector2(clamped_board_pos[0] + pos[0], clamped_board_pos[1] + pos[1])
 		var block = block_map[block_pos[0]][block_pos[1]]
-		if block != null:
+		if block != null and !block.is_active:
 			block.modulate = Color.BLACK
 
 func generate_block_map():
@@ -323,8 +337,8 @@ func preview_line_block(board_pos: Vector2):
 				[0, 1]
 			]
 		RotationType.HALF_TURN, RotationType.NONE:
+			var clamped_row = clamp(board_pos.x, 2 + num_locked_rows, height - 2 - num_locked_rows)
 			var clamped_col = clamp(board_pos.y, num_locked_cols, width - 1 - num_locked_cols)
-			var clamped_row = clamp(board_pos.x, 2, height - 2)
 			clamped_board_pos = Vector2(clamped_row, clamped_col)
 			block_positions = [
 				[-2, 0],
