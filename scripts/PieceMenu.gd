@@ -9,6 +9,7 @@ var countdown_seconds = initial_countdown_seconds
 var countdown_timer: Timer
 
 signal timer_expired
+signal on_timer_tick(seconds_remaining)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -40,6 +41,7 @@ func timer_tick():
 		add_child(timer)
 	else:
 		countdown_seconds -= 1
+		on_timer_tick.emit(countdown_seconds)
 		countdown_timer_label.text = str(countdown_seconds)
 
 func restart_timer():

@@ -10,6 +10,8 @@ extends Node2D
 @onready var score_label = $ScoreLabel as Label
 @onready var piece_menu = $PieceMenu as PieceMenu
 @onready var lives_menu = $LivesMenu as LivesMenu
+@onready var alert_panel = $AlertPanel as Panel
+@onready var animation_player = $AnimationPlayer as AnimationPlayer
 
 var selected_eraser_shape: EraseButton.EraseShape
 var is_erase_mode = false
@@ -30,13 +32,40 @@ func _ready():
 			var erase_button = child as EraseButton
 			erase_button.select_eraser.connect(on_eraser_selected)
 	piece_menu.timer_expired.connect(handle_life_decrease)
+
+	var callable = Callable(self, "handle_piece_timer_tick")
+	piece_menu.on_timer_tick.connect(callable)
 	board.block_placed.connect(updated_score)
+	board.block_placed.connect(stop_flashing_alert_panel)
 	board.block_erased.connect(block_erased)
 
 func on_eraser_selected(eraser_shape):
 	board.clear_curr_block_pieces()
 	selected_eraser_shape = eraser_shape
 	is_erase_mode = true
+
+func handle_piece_timer_tick(seconds_remaining: int):
+	# Show alert flash if timer running out
+	match level:
+		0:
+			if seconds_remaining <= 10:
+				flash_alert_panel()
+		1:
+			if seconds_remaining <= 7:
+				flash_alert_panel()
+		2:
+			if seconds_remaining <= 5:
+				flash_alert_panel()
+		3:
+			if seconds_remaining <= 3:
+				flash_alert_panel()
+
+func flash_alert_panel():
+	animation_player.play("flash_alert")
+
+func stop_flashing_alert_panel():
+	animation_player.stop()
+	alert_panel.modulate.a = 0
 
 func updated_score():
 	curr_score += BLOCK_PLACE_SCORE
@@ -52,7 +81,7 @@ func updated_score():
 	if level < 3 and curr_score >= LEVEL_THREE_THRESHOLD:
 		level = 3
 		board.set_new_locked_cols_and_rows(0, 0)
-		piece_menu.set_new_expiry_timer(5)
+		piece_menu.set_new_expiry_timer(6)
 
 func _process(_delta):
 	if Input.is_action_just_pressed("disable_erase"):
