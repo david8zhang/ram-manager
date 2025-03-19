@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dramux1asfstc"]
+[gd_scene load_steps=15 format=3 uid="uid://dramux1asfstc"]
 
 [ext_resource type="Script" path="res://scripts/Game.gd" id="1_l37a8"]
 [ext_resource type="PackedScene" uid="uid://cimhebjccj8f7" path="res://prefabs/Board.tscn" id="2_tikg1"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cqb73gea4ntex" path="res://assets/placeholder/Erase2x2.png" id="5_6w2cb"]
 [ext_resource type="Texture2D" uid="uid://bcevspw7gvh4a" path="res://assets/placeholder/multi/I.png" id="5_24mnn"]
 [ext_resource type="Texture2D" uid="uid://da7783n8pugo1" path="res://assets/placeholder/Erase2x4.png" id="6_sebkt"]
+[ext_resource type="Script" path="res://scripts/PlayerVariables.gd" id="10_datja"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_528pj"]
 content_margin_left = 0.0
@@ -131,6 +132,13 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_528pj")
 [node name="Erase1x1" parent="EraserMenu" instance=ExtResource("4_l8wks")]
 position = Vector2(184, 174)
 
+[node name="Panel" parent="EraserMenu/Erase1x1" index="2"]
+visible = false
+offset_left = -176.0
+offset_top = -100.0
+offset_right = 174.0
+offset_bottom = 73.0
+
 [node name="TypeLabel" type="Label" parent="EraserMenu/Erase1x1"]
 offset_left = -174.0
 offset_top = -83.0
@@ -141,16 +149,26 @@ text = "1 x 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Panel" parent="EraserMenu/Erase1x1" index="3"]
-visible = false
-offset_left = -176.0
-offset_top = -100.0
-offset_right = 174.0
-offset_bottom = 73.0
-
 [node name="Erase2x2" parent="EraserMenu" instance=ExtResource("4_l8wks")]
 position = Vector2(183, 363)
 eraser_shape = 1
+
+[node name="Sprite2D" parent="EraserMenu/Erase2x2" index="0"]
+texture = ExtResource("5_6w2cb")
+
+[node name="Button" parent="EraserMenu/Erase2x2" index="1"]
+offset_left = -63.0
+offset_top = -64.0
+offset_right = 65.0
+offset_bottom = 64.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" parent="EraserMenu/Erase2x2" index="2"]
+visible = false
+offset_left = -174.0
+offset_top = -116.0
+offset_right = 176.0
+offset_bottom = 99.0
 
 [node name="TypeLabel" type="Label" parent="EraserMenu/Erase2x2"]
 offset_left = -173.0
@@ -162,26 +180,26 @@ text = "2 x 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Sprite2D" parent="EraserMenu/Erase2x2" index="1"]
-texture = ExtResource("5_6w2cb")
-
-[node name="Button" parent="EraserMenu/Erase2x2" index="2"]
-offset_left = -63.0
-offset_top = -64.0
-offset_right = 65.0
-offset_bottom = 64.0
-metadata/_edit_use_anchors_ = true
-
-[node name="Panel" parent="EraserMenu/Erase2x2" index="3"]
-visible = false
-offset_left = -174.0
-offset_top = -116.0
-offset_right = 176.0
-offset_bottom = 99.0
-
 [node name="Erase2x4" parent="EraserMenu" instance=ExtResource("4_l8wks")]
 position = Vector2(183, 589)
 eraser_shape = 2
+
+[node name="Sprite2D" parent="EraserMenu/Erase2x4" index="0"]
+texture = ExtResource("6_sebkt")
+
+[node name="Button" parent="EraserMenu/Erase2x4" index="1"]
+offset_left = -128.0
+offset_top = -64.0
+offset_right = 128.0
+offset_bottom = 64.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" parent="EraserMenu/Erase2x4" index="2"]
+visible = false
+offset_left = -174.0
+offset_top = -127.0
+offset_right = 176.0
+offset_bottom = 113.0
 
 [node name="TypeLabel" type="Label" parent="EraserMenu/Erase2x4"]
 offset_left = -173.0
@@ -192,23 +210,6 @@ theme_override_font_sizes/font_size = 30
 text = "2 x 4"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Sprite2D" parent="EraserMenu/Erase2x4" index="1"]
-texture = ExtResource("6_sebkt")
-
-[node name="Button" parent="EraserMenu/Erase2x4" index="2"]
-offset_left = -128.0
-offset_top = -64.0
-offset_right = 128.0
-offset_bottom = 64.0
-metadata/_edit_use_anchors_ = true
-
-[node name="Panel" parent="EraserMenu/Erase2x4" index="3"]
-visible = false
-offset_left = -174.0
-offset_top = -127.0
-offset_right = 176.0
-offset_bottom = 113.0
 
 [node name="EraserMenuTitleLabel" type="Label" parent="."]
 offset_left = -822.0
@@ -246,6 +247,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_s1dgr")
 libraries = {
 "": SubResource("AnimationLibrary_8ktoe")
 }
+
+[node name="PlayerVariables" type="Node" parent="."]
+script = ExtResource("10_datja")
 
 [editable path="EraserMenu/Erase1x1"]
 [editable path="EraserMenu/Erase2x2"]

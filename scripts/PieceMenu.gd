@@ -4,7 +4,7 @@ extends PanelContainer
 @onready var next_piece_type
 @onready var next_piece_preview = $VBoxContainer/TextureRect as TextureRect
 @onready var countdown_timer_label = $VBoxContainer/PieceMenuCountdown as Label
-var initial_countdown_seconds = 20
+var initial_countdown_seconds = 25
 var countdown_seconds = initial_countdown_seconds
 var countdown_timer: Timer
 

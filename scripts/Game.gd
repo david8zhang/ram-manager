@@ -101,6 +101,9 @@ func _process(_delta):
 
 func handle_life_decrease():
 	lives_menu.decrease_lives()
+	if lives_menu.remaining_lives == 0:
+		PlayerVariables.player_score = curr_score
+		get_tree().change_scene_to_file("res://scenes/GameOver.tscn")
 
 func block_erased():
 	match selected_eraser_shape:
