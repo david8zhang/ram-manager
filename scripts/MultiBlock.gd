@@ -19,7 +19,7 @@ func on_deactivate(timer: Timer):
 	timer.queue_free()
 	for block in mblock_pieces:
 		block.is_active = false
-		block.texture = load("res://assets/placeholder/Inactive.png")
+		block.texture = load("res://assets/placeholder/single/Gray.png")
 	is_active = false
 
 func handle_erase():
